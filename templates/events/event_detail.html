@@ -5,13 +5,14 @@
         {% include "includes/event_list.html" %}
         <div class="col-sm-9">
             <div class="row">
+                <div class="event" data-event-id="{{ event.id }}"></div>
                 <div class="col-8 col-sm-6">
                     <h3>{{ event.title }}</h3>
                     <p>{{ event.text }}</p>
                     <p>{{ event.date_creation }}</p>
 
                     <h3>Участники события</h3>
-                    <ul class="list-unstyled">
+                    <ul class="list-unstyled" id="members-list">
                         {% if event.members.all %}
                             {% for participant in event.members.all %}
                             <li><a href="{% url 'Calendar:user_profile' participant.id %}">{{ participant.first_name }} {{ participant.last_name }}</a></li>

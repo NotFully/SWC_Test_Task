@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from django.shortcuts import get_object_or_404, render, redirect
 from .models import Event
 from .serializers import EventSerializer
+from users.serializers import CustomUserSerializer
 from users.models import CustomUser
 from .forms import EventForm
 
@@ -63,6 +64,14 @@ class EventDeleteView(generics.DestroyAPIView):
             return Response({"message": "Событие успешно удалено"})
         else:
             return Response({"error": "У вас нет прав для удаления этого события"}, status=status.HTTP_403_FORBIDDEN)
+
+
+class EventMembersListView(generics.ListAPIView):
+    serializer_class = CustomUserSerializer
+
+    def get_queryset(self):
+        event_id = self.kwargs['event_id']
+        return CustomUser.objects.filter(participation_in_events__id=event_id)
 
 
 def event_list(request):

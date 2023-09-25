@@ -1,6 +1,6 @@
 <div class="col-sm-3">
     <h4>Все события</h4>
-    <ul class="list-unstyled">
+    <ul class="list-unstyled" id="events-list">
         {% if events %}
             {% for event in events.all %}
             <li><a href="{% url 'Calendar:event_detail' event.id %}">{{ event.title }}</a></li>
