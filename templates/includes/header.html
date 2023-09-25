@@ -1,0 +1,33 @@
+{% with request.resolver_match.view_name as view_name %}
+
+<header>
+    <nav>
+        <div>
+            <a href="{% url 'Calendar:index' %}">Главная</a>
+            {% if user.is_authenticated %}
+            <ul>
+                <li>
+                    <a href="{% url 'Calendar:user_profile' user.id %}"><b>{{ user.username }}</b></a>
+                </li>
+                <li>
+                    <a href="{% url 'users:logout' %}">Выйти</a>
+                </li>
+            </ul>
+            {% else %}
+            <ul>
+                <li>
+                    <b>Выполните вход</b>
+                </li>
+                <li>
+                    <a href="{% url 'users:login' %}">Вход</a>
+                </li>
+                <li>
+                    <a href="{% url 'users:registration' %}">Регистрация</a>
+                </li>
+            </ul>
+            {% endif %}
+        </div>
+    </nav>
+</header>
+
+{% endwith %}

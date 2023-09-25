@@ -1,0 +1,21 @@
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>
+        {% block title %}
+            Event Calendar
+        {% endblock %}
+    </title>
+</head>
+<body>
+    {% include 'includes/header.html' %}
+    <main>
+        <div>
+            {% block content %}
+                Информация главной страницы.
+            {% endblock %}
+        </div>
+    </main>
+</body>
+</html>

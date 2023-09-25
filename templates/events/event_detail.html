@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div>
+    <h2>Информация о событии</h2>
+    <h3>{{ event.title }}</h3>
+    <p>{{ event.text }}</p>
+    <p>Дата создания: {{ event.date_creation }}</p>
+
+    <h3>Участники события</h3>
+    <ul>
+        {% for participant in event.members.all %}
+        <li><a href="{% url 'Calendar:user_profile' participant.id %}">{{ participant.first_name }} {{ participant.last_name }}</a></li>
+        {% endfor %}
+    </ul>
+
+    {% if user not in event.members.all %}
+    <form method="post" action="{% url 'Calendar:join_event' event.id %}">
+        {% csrf_token %}
+        <button type="submit">Вступить в событие</button>
+    </form>
+    {% else %}
+    <form method="post" action="{% url 'Calendar:leave_event' event.id %}">
+        {% csrf_token %}
+        <button type="submit">Выйти из события</button>
+    </form>
+    {% endif %}
+</div>
+{% endblock %}
