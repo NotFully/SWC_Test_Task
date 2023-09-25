@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
     <title>
         {% block title %}
             Event Calendar
@@ -11,7 +12,7 @@
 <body>
     {% include 'includes/header.html' %}
     <main>
-        <div>
+        <div class="container pt-3">
             {% block content %}
                 Информация главной страницы.
             {% endblock %}

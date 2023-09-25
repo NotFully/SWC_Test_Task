@@ -1,16 +1,17 @@
 {% extends "base.html" %}
-{% block titte %} Регистрация {% endblock %}
+
 {% block content %}
 <div class="container">
     <div class="row">
+        {% include "includes/event_list.html" %}
         <div class="col-sm-9">
             <div class="row">
                 <div class="col-8 col-sm-6">
-                    <h2>Регистрация</h2>
+                    <h2>Создание события</h2>
                     <form method="post">
                         {% csrf_token %}
                         {{ form.as_p }}
-                        <button type="submit" class="btn btn-success">Зарегистрироваться</button>
+                        <button type="submit"  class="btn btn-success">Создать</button>
                     </form>
                 </div>
             </div>

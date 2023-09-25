@@ -4,6 +4,7 @@ from django.shortcuts import get_object_or_404, render, redirect
 from .models import Event
 from .serializers import EventSerializer
 from users.models import CustomUser
+from .forms import EventForm
 
 
 class EventCreateView(generics.CreateAPIView):
@@ -65,17 +66,24 @@ class EventDeleteView(generics.DestroyAPIView):
 
 
 def event_list(request):
-    events = Event.objects.all()
-    return render(request, 'main/index.html', {'events': events})
+    if request.user.is_authenticated:
+        events = Event.objects.all()
+        participating_events = request.user.participation_in_events.all()
+        return render(request, 'main/index.html', {'events': events, 'participating_events': participating_events})
+    else:
+        events = Event.objects.all()
+        return render(request, 'main/index.html', {'events': events})
 
 
 def user_profile(request, user_id):
     user = get_object_or_404(CustomUser, id=user_id)
+    events = Event.objects.all()
     created_events = Event.objects.filter(creator=user)
     participating_events = user.participation_in_events.all()
 
     return render(request, 'users/profile.html', {
         'user': user,
+        'events': events,
         'created_events': created_events,
         'participating_events': participating_events,
     })
@@ -83,18 +91,49 @@ def user_profile(request, user_id):
 
 def event_detail(request, event_id):
     event = get_object_or_404(Event, id=event_id)
-    return render(request, 'events/event_detail.html', {'event': event})
+    events = Event.objects.all()
+    if request.user.is_authenticated:
+        participating_events = request.user.participation_in_events.all()
+        return render(request, 'events/event_detail.html',
+                      {'event': event, 'events': events, 'participating_events': participating_events})
+    else:
+        events = Event.objects.all()
+        return render(request, 'events/event_detail.html', {'event': event, 'events': events})
 
 
 def join_event(request, event_id):
     event = get_object_or_404(Event, id=event_id)
     if request.user not in event.members.all():
         event.members.add(request.user)
-    return render(request, 'events/event_detail.html', {'event': event})
+    event_detail(request, event_id)
+    return redirect('Calendar:event_detail', event_id=event.id)
 
 
 def leave_event(request, event_id):
     event = get_object_or_404(Event, id=event_id)
     if request.user in event.members.all():
         event.members.remove(request.user)
-    return render(request, 'events/event_detail.html', {'event': event})
+    event_detail(request, event_id)
+    return redirect('Calendar:event_detail', event_id=event.id)
+
+
+def delete_event(request, event_id):
+    event = get_object_or_404(Event, id=event_id)
+    if request.user == event.creator:
+        event.delete()
+    return redirect('Calendar:index')
+
+
+def create_event(request):
+    if request.method == 'POST':
+        form = EventForm(request.POST)
+        if form.is_valid():
+            event = form.save(commit=False)
+            event.creator = request.user
+            event.save()
+            return redirect('Calendar:event_detail', event_id=event.id)
+    else:
+        form = EventForm()
+    events = Event.objects.all()
+    participating_events = request.user.participation_in_events.all()
+    return render(request, 'events/create_event.html', {'form': form, 'events': events, 'participating_events': participating_events})

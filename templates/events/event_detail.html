@@ -1,29 +1,49 @@
 {% extends "base.html" %}
-
 {% block content %}
-<div>
-    <h2>Информация о событии</h2>
-    <h3>{{ event.title }}</h3>
-    <p>{{ event.text }}</p>
-    <p>Дата создания: {{ event.date_creation }}</p>
+<div class="container">
+    <div class="row">
+        {% include "includes/event_list.html" %}
+        <div class="col-sm-9">
+            <div class="row">
+                <div class="col-8 col-sm-6">
+                    <h3>{{ event.title }}</h3>
+                    <p>{{ event.text }}</p>
+                    <p>{{ event.date_creation }}</p>
 
-    <h3>Участники события</h3>
-    <ul>
-        {% for participant in event.members.all %}
-        <li><a href="{% url 'Calendar:user_profile' participant.id %}">{{ participant.first_name }} {{ participant.last_name }}</a></li>
-        {% endfor %}
-    </ul>
+                    <h3>Участники события</h3>
+                    <ul class="list-unstyled">
+                        {% if event.members.all %}
+                            {% for participant in event.members.all %}
+                            <li><a href="{% url 'Calendar:user_profile' participant.id %}">{{ participant.first_name }} {{ participant.last_name }}</a></li>
+                            {% endfor %}
+                        {% else %}
+                            <li>Нет участников</li>
+                        {% endif %}
+                    </ul>
 
-    {% if user not in event.members.all %}
-    <form method="post" action="{% url 'Calendar:join_event' event.id %}">
-        {% csrf_token %}
-        <button type="submit">Вступить в событие</button>
-    </form>
-    {% else %}
-    <form method="post" action="{% url 'Calendar:leave_event' event.id %}">
-        {% csrf_token %}
-        <button type="submit">Выйти из события</button>
-    </form>
-    {% endif %}
+                    {% if user.is_authenticated %}
+                    {% if user not in event.members.all %}
+                    <form method="post" action="{% url 'Calendar:join_event' event.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-success">Принять участие</button>
+                    </form>
+                    {% else %}
+                    <form method="post" action="{% url 'Calendar:leave_event' event.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-success">Отказаться от участия</button>
+                    </form>
+                    {% endif %}
+
+                    {% if user == event.creator %}
+                    <form method="post" action="{% url 'Calendar:delete_event' event.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger">Удалить событие</button>
+                    </form>
+                    {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}

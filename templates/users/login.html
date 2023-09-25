@@ -1,13 +1,29 @@
 {% extends "base.html" %}
 {% block title %} Войти {% endblock %}
 {% block content %}
-<div>
-    <h2>Авторизация</h2>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.username.label_tag }} {{ form.username }}
-        {{ form.password.label_tag }} {{ form.password }}
-        <button type="submit">Войти</button>
-    </form>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-9">
+            <div class="row">
+                <div class="col-8 col-sm-6">
+                    <h2>Авторизация</h2>
+                    <div class="container">
+                        <form method="post">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                {{ form.username.label_tag }} {{ form.username }}
+                            </div>
+                            <div class="mb-3">
+                                {{ form.password.label_tag }} {{ form.password }}
+                            </div>
+                            <div class="mb-3">
+                                <button type="submit" class="btn btn-success">Войти</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}

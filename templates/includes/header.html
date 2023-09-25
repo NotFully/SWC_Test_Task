@@ -1,31 +1,48 @@
+{% load static %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+<script src="{% static 'js/update_events.js' %}"></script>
+
+
 {% with request.resolver_match.view_name as view_name %}
 
 <header>
-    <nav>
-        <div>
-            <a href="{% url 'Calendar:index' %}">Главная</a>
-            {% if user.is_authenticated %}
-            <ul>
-                <li>
-                    <a href="{% url 'Calendar:user_profile' user.id %}"><b>{{ user.username }}</b></a>
-                </li>
-                <li>
-                    <a href="{% url 'users:logout' %}">Выйти</a>
-                </li>
-            </ul>
-            {% else %}
-            <ul>
-                <li>
-                    <b>Выполните вход</b>
-                </li>
-                <li>
-                    <a href="{% url 'users:login' %}">Вход</a>
-                </li>
-                <li>
-                    <a href="{% url 'users:registration' %}">Регистрация</a>
-                </li>
-            </ul>
-            {% endif %}
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                {% if user.is_authenticated %}
+                <ul class="navbar-nav mr-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link {% if view_name  == 'Calendar:index' %}active{% endif %}" href="{% url 'Calendar:index' %}">Главная</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if view_name  == 'Calendar:create_event' %}active{% endif %}" href="{% url 'Calendar:create_event' %}">Создать событие</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if view_name  == 'Calendar:user_profile' %}active{% endif %}" href="{% url 'Calendar:user_profile' user.id %}"><b>{{ user.username }}</b></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if view_name  == 'users:logout' %}active{% endif %}" href="{% url 'users:logout' %}">Выйти</a>
+                    </li>
+                </ul>
+                {% else %}
+                <ul class="navbar-nav mr-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link {% if view_name  == 'Calendar:index' %}active{% endif %}" href="{% url 'Calendar:index' %}">Главная</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if view_name  == 'users:login' %}active{% endif %}" href="{% url 'users:login' %}">Вход</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if view_name  == 'users:registration' %}active{% endif %}" href="{% url 'users:registration' %}">Регистрация</a>
+                    </li>
+                </ul>
+                {% endif %}
+            </div>
         </div>
     </nav>
 </header>

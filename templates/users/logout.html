@@ -1,9 +1,13 @@
 {% extends "base.html" %}
 {% block content %}
-<div>
-  Вы успешно вышли
-  <button>
-    <a href="{% url 'Calendar:index' %}">-----------</a>
-  </button>
+<div class="container">
+    <ul class="list-unstyled">
+        <li class="pt-2">Вы успешно вышли</li>
+        <li class="pt-2">
+            <button class="btn btn-success">
+                <a href="{% url 'Calendar:index' %} " class="text-decoration-none text-reset">На главную</a>
+            </button>
+        </li>
+    </ul>
 </div>
 {% endblock %}

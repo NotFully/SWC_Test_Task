@@ -1,9 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
- <h2>Список событий</h2>
-  <ul>
-    {% for event in events %}
-      <li><a href="{% url 'Calendar:event_detail' event.id %}">{{ event.title }}</a> - {{ event.date_creation }}</li>
-    {% endfor %}
-  </ul>
+<div class="container">
+    {% include "includes/event_list.html" %}
+</div>
 {% endblock %}

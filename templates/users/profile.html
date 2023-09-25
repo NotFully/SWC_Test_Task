@@ -1,19 +1,28 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <h2>Профиль пользователя: {{ user.username }}</h2>
-
-  <h3>Созданные события:</h3>
-  <ul>
-    {% for event in created_events %}
-      <li>{{ event.title }} - {{ event.date_creation }}</li>
-    {% endfor %}
-  </ul>
-
-  <h3>События, в которых участвует:</h3>
-  <ul>
-    {% for event in participating_events %}
-      <li>{{ event.title }} - {{ event.date_creation }}</li>
-    {% endfor %}
-  </ul>
+<div class="container">
+    <div class="row">
+        {% include "includes/event_list.html" %}
+        <div class="col-sm-9">
+            <div class="row">
+                <div class="col-8 col-sm-6">
+                    <h3>Профиль пользователя: {{ user.username }}</h3>
+                    <h2>Созданные события:</h2>
+                    <ul class="list-unstyled">
+                        {% for event in created_events %}
+                        <li>{{ event.title }} - {{ event.date_creation }}</li>
+                        {% endfor %}
+                    </ul>
+                    <h2>Участвует в:</h2>
+                    <ul class="list-unstyled">
+                        {% for event in participating_events %}
+                        <li>{{ event.title }} - {{ event.date_creation }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
