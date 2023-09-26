@@ -3,7 +3,22 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, Permis
 
 
 class CustomUserManager(BaseUserManager):
+    """
+        Менеджер пользователей для модели CustomUser.
+        Менеджер для создавания пользователей и суперпользователей.
+    """
     def create_user(self, username, password=None, **extra_fields):
+        """
+            Создает и сохраняет нового пользователя.
+
+            Args:
+                username (str): Имя пользователя.
+                password (str, optional): Пароль пользователя. Может быть None при создании.
+                **extra_fields: Дополнительные поля пользователя.
+
+            Returns:
+                CustomUser: Новый созданный пользователь.
+        """
         if not username:
             raise ValueError('The Username field must be set')
         user = self.model(username=username, **extra_fields)
@@ -12,6 +27,17 @@ class CustomUserManager(BaseUserManager):
         return user
 
     def create_superuser(self, username, password=None, **extra_fields):
+        """
+            Создает и сохраняет нового суперпользователя.
+
+            Args:
+                username (str): Имя суперпользователя.
+                password (str, optional): Пароль суперпользователя. Может быть None при создании.
+                **extra_fields: Дополнительные поля суперпользователя.
+
+            Returns:
+                CustomUser: Новый созданный суперпользователь.
+        """
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
 
@@ -24,6 +50,27 @@ class CustomUserManager(BaseUserManager):
 
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
+    """
+        Пользовательская модель CustomUser.
+
+        Attributes:
+            id (int): Уникальный идентификатор пользователя.
+            username (str): Имя пользователя.
+            first_name (str): Имя пользователя.
+            last_name (str): Фамилия пользователя.
+            date_joined (datetime): Дата и время регистрации пользователя.
+            birth_date (date, optional): Дата рождения пользователя (может быть None).
+
+            is_active (bool): Флаг активности пользователя.
+            is_staff (bool): Флаг сотрудника. True для суперпользователей.
+            is_superuser (bool): Флаг суперпользователя.
+
+        Methods:
+            has_module_perms(app_label): Проверяет разрешения на модуль.
+            has_perm(perm, obj=None): Проверяет разрешения.
+            get_short_name(): Возвращает короткое имя пользователя.
+            get_full_name(): Возвращает полное имя пользователя.
+    """
     id = models.AutoField(primary_key=True)
     username = models.CharField(unique=True, max_length=30)
     first_name = models.CharField(max_length=30)
