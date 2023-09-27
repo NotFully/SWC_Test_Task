@@ -26,7 +26,7 @@ $('.event').each(function () {
     var eventId = $(this).data('event-id');
     setInterval(function () {
         updateMembers(eventId);
-    }, 5000);
+    }, 30000);
 });
 });
 
